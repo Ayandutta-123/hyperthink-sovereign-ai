@@ -109,12 +109,13 @@ function Reveal({
   className = "",
   delay = 0,
   immediate = false,
+  ...rest
 }: {
   children: React.ReactNode;
   className?: string;
   delay?: number;
   immediate?: boolean;
-}) {
+} & Omit<React.HTMLAttributes<HTMLDivElement>, "className" | "children" | "style">) {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -147,6 +148,7 @@ function Reveal({
       ref={ref}
       className={`reveal ${immediate ? "is-visible" : ""} ${className}`.trim()}
       style={{ ["--reveal-delay" as string]: `${delay}s` }}
+      {...rest}
     >
       {children}
     </div>
