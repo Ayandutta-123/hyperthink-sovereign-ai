@@ -4,14 +4,23 @@ import { useEffect, useRef } from "react";
 import {
   ArrowDown,
   ArrowRight,
+  Bot,
+  Boxes,
+  ChartColumn,
   Check,
   ChevronRight,
   ClipboardList,
   Cloud,
+  Cpu,
+  Database,
   Download,
+  Eye,
   FileCheck2,
+  FileText,
   Fingerprint,
+  HardDrive,
   Layers,
+  Lightbulb,
   LockKeyhole,
   Network,
   Plus,
@@ -19,16 +28,15 @@ import {
   Shield,
   ShieldCheck,
   SquareTerminal,
+  Users,
   type LucideIcon,
-  Workflow,
 } from "lucide-react";
 
-const stack: { number: string; title: string; copy: string; icon: LucideIcon }[] = [
-  { number: "01", title: "Infrastructure", copy: "Compute, storage, network and accelerators in an environment you control.", icon: Server },
-  { number: "02", title: "Platform", copy: "A private AI foundation for models, data services and developer operations.", icon: Layers },
-  { number: "03", title: "Orchestration", copy: "Route workloads, agents and tools across the right models and resources.", icon: Workflow },
-  { number: "04", title: "Governance", copy: "Policy, identity, observability and approvals embedded in every workflow.", icon: ShieldCheck },
-  { number: "05", title: "Applications", copy: "Production AI experiences grounded in your enterprise context.", icon: Network },
+const foundation: { number: string; title: string; copy: string; icon: LucideIcon }[] = [
+  { number: "01", title: "Compute", copy: "High-performance AI infrastructure, GPU and CPU workloads, and virtualization with resource allocation.", icon: Cpu },
+  { number: "02", title: "AI software", copy: "AI frameworks, model serving, LLM and ML workloads, and orchestration in one runtime.", icon: Layers },
+  { number: "03", title: "Data + integration", copy: "Enterprise data, APIs and databases, knowledge repositories, and business applications.", icon: Database },
+  { number: "04", title: "Control", copy: "Security, identity and access, governance, and monitoring with auditability.", icon: ShieldCheck },
 ];
 
 const controlChain: { label: string; icon: LucideIcon }[] = [
@@ -39,67 +47,68 @@ const controlChain: { label: string; icon: LucideIcon }[] = [
   { label: "Audit", icon: ClipboardList },
 ];
 
-const capabilities = [
-  {
-    title: "Finance AI",
-    items: ["Financial close copilot", "Invoice intelligence", "Cash-flow forecasting", "Procurement analysis"],
-  },
-  {
-    title: "Operations AI",
-    items: ["Predictive maintenance", "Supply-chain planning", "Field service agents", "Quality inspection"],
-  },
-  {
-    title: "Risk & Security AI",
-    items: ["Fraud detection", "Threat investigation", "Compliance monitoring", "Policy intelligence"],
-  },
-  {
-    title: "Customer & Knowledge AI",
-    items: ["Private enterprise search", "Service copilots", "Document intelligence", "Multilingual knowledge agents"],
-  },
+const computeCaps: { title: string; icon: LucideIcon }[] = [
+  { title: "High-performance compute", icon: Cpu },
+  { title: "GPU-accelerated workloads", icon: Boxes },
+  { title: "Enterprise storage", icon: HardDrive },
+  { title: "High-speed networking", icon: Network },
+  { title: "Virtualized environments", icon: Server },
+  { title: "Containerized AI workloads", icon: Layers },
 ];
 
-const stages = ["Strategy", "Architecture", "Implementation", "Governance", "Optimization"];
+const principles: { title: string; copy: string; icon: LucideIcon }[] = [
+  { title: "Sovereign", copy: "Your data. Your infrastructure.", icon: Database },
+  { title: "Governed", copy: "Your policies. Your accountability.", icon: FileCheck2 },
+  { title: "Secure", copy: "Your AI. Protected at runtime.", icon: Shield },
+  { title: "Intelligent", copy: "Your workflows. Reimagined.", icon: Lightbulb },
+];
+
+const workloads: { number: string; title: string; copy: string; icon: LucideIcon }[] = [
+  { number: "01", title: "Agentic AI", copy: "Autonomous workflows, decision support, and task execution.", icon: Bot },
+  { number: "02", title: "Generative AI", copy: "Private LLMs, knowledge assistants, and content generation.", icon: FileText },
+  { number: "03", title: "Computer vision", copy: "Safety, security, inspection, and site intelligence.", icon: Eye },
+  { number: "04", title: "Document AI", copy: "Invoice processing, extraction, and summarization.", icon: ClipboardList },
+  { number: "05", title: "Enterprise copilots", copy: "HR, finance, operations, and knowledge assistants.", icon: Users },
+  { number: "06", title: "Predictive AI", copy: "Forecasting, anomaly detection, and operational optimization.", icon: ChartColumn },
+];
+
+const stages: { title: string; copy: string }[] = [
+  { title: "Architect", copy: "Design the AI, data, and infrastructure stack." },
+  { title: "Deploy", copy: "Integrate compute, AI runtime, models, and enterprise systems." },
+  { title: "Secure & govern", copy: "Apply security, identity, policies, monitoring, and auditability." },
+  { title: "Scale", copy: "Expand workloads, models, and applications as requirements grow." },
+];
 
 const faqs = [
   {
-    question: "What is sovereign AI?",
+    question: "What do we actually get with AI in a Box?",
     answer:
-      "Sovereign AI is an enterprise approach to building and operating AI within defined control boundaries for infrastructure, data, models, access, and policy. It gives organizations direct authority over where AI runs, what it can access, and how every action is governed.",
+      "A private enterprise AI platform in one deployable environment: compute, AI software, data integration, and runtime control. Production AI runs on infrastructure you control, on-premise or in a dedicated cloud tenancy.",
   },
   {
-    question: "What’s the difference between sovereign AI and sovereign cloud?",
+    question: "How is this different from calling a public LLM API?",
     answer:
-      "A sovereign cloud focuses on the residency, jurisdiction, and operational control of cloud infrastructure. Sovereign AI extends those controls across models, training and retrieval data, agents, tools, runtime policy, and auditability.",
+      "A public API sends the request to a provider. AI in a Box keeps data, models, identities, and policy inside your boundary, and every action leaves an audit record.",
   },
   {
-    question: "Can sovereign AI run fully on-premise?",
+    question: "Does our data stay in our environment?",
     answer:
-      "Yes. A sovereign AI platform can run entirely on-premise, including model serving, vector storage, orchestration, guardrails, observability, and enterprise integrations.",
+      "Yes. Model serving, retrieval, and application traffic stay inside the environment you operate, including an air-gapped deployment when that is required.",
   },
   {
-    question: "How is sovereign AI different from using a public LLM API?",
+    question: "Can we use our own models and our existing security tools?",
     answer:
-      "Public LLM APIs send requests to a provider-controlled service. Sovereign AI keeps the operating boundary under enterprise control and adds explicit governance over models, data access, tool use, identities, and audit records.",
+      "Yes. You choose approved models for each workload, and the platform connects to your identity provider, data platforms, and security controls.",
   },
   {
-    question: "Can we use our existing cloud, data center, and security tools?",
+    question: "Can we start with one use case?",
     answer:
-      "Yes. The platform is designed to work with existing identity providers, data platforms, security controls, observability tools, and enterprise applications. The target architecture is shaped around your current environment rather than forcing a complete replacement.",
+      "Yes. The first step is an assessment around one workload. That defines the stack, the controls, and a path from a contained release to more workloads on the same foundation.",
   },
   {
-    question: "Which AI models can we run?",
+    question: "Who runs it after it is live?",
     answer:
-      "You can operate approved open, commercial, and organization-specific models based on workload, language, risk, and performance needs. Model routing and policy controls help ensure each request uses an appropriate model.",
-  },
-  {
-    question: "How long does a sovereign AI implementation take?",
-    answer:
-      "Timing depends on infrastructure readiness, integrations, security approvals, and the first use case. A focused assessment defines the target architecture and phased roadmap before implementation begins, reducing uncertainty and avoiding an oversized first release.",
-  },
-  {
-    question: "How do we start without committing to a full platform rollout?",
-    answer:
-      "Start with an architecture and governance assessment around one high-value use case. This establishes control requirements, validates deployment choices, and produces a practical path from a contained pilot to production.",
+      "Your team can operate it. The deployment model is customer-managed, on-premise or self-hosted, with HyperThink there for architecture, integration, and scale.",
   },
 ];
 
@@ -165,51 +174,42 @@ function Eyebrow({ children, dark = false }: { children: React.ReactNode; dark?:
 }
 
 function ControlPlane({ compact = false }: { compact?: boolean }) {
+  const cards = [
+    { x: 64, k: "01", title: "Compute", copy: "GPU and CPU" },
+    { x: 240, k: "02", title: "AI software", copy: "Models and runtime" },
+    { x: 416, k: "03", title: "Data", copy: "Systems and APIs" },
+  ];
   return (
     <div
       className={`control-plane ${compact ? "control-plane--compact" : ""}`}
       role="img"
-      aria-label="Animated sovereign AI control plane connecting protected infrastructure, models, policy, and applications"
+      aria-label="Private environment diagram: compute, AI software, and data pass through a control gate before enterprise applications can act"
     >
-      <svg viewBox="0 0 680 560" fill="none" aria-hidden="true">
-        <defs>
-          <linearGradient id={`beam-${compact}`} x1="180" y1="430" x2="515" y2="112" gradientUnits="userSpaceOnUse">
-            <stop stopColor="#C1262A" stopOpacity="0.1" />
-            <stop offset="0.5" stopColor="#C1262A" />
-            <stop offset="1" stopColor="#F2A6A9" stopOpacity="0.25" />
-          </linearGradient>
-          <radialGradient id={`core-${compact}`}>
-            <stop stopColor="#C1262A" stopOpacity="0.32" />
-            <stop offset="1" stopColor="#C1262A" stopOpacity="0" />
-          </radialGradient>
-        </defs>
-        <circle className="core-glow" cx="340" cy="280" r="154" fill={`url(#core-${compact})`} />
-        <g className="orbit orbit-one">
-          <ellipse cx="340" cy="280" rx="232" ry="124" stroke="rgba(255,255,255,.12)" />
-          <circle cx="112" cy="264" r="7" fill="#C1262A" />
-        </g>
-        <g className="orbit orbit-two">
-          <ellipse cx="340" cy="280" rx="168" ry="238" stroke="rgba(255,255,255,.1)" transform="rotate(42 340 280)" />
-          <circle cx="490" cy="105" r="5" fill="#fff" fillOpacity=".72" />
-        </g>
-        <path className="beam" d="M159 427L269 336L340 280L426 207L521 115" stroke={`url(#beam-${compact})`} strokeWidth="2" />
-        <path d="M159 427L284 430L386 475L521 443" stroke="rgba(255,255,255,.1)" />
-        <path d="M152 132L245 196L340 280L503 339" stroke="rgba(255,255,255,.1)" />
-        {[
-          [159, 427, "DATA"],
-          [152, 132, "IDENTITY"],
-          [521, 115, "POLICY"],
-          [521, 443, "APPS"],
-          [340, 280, "CONTROL"],
-        ].map(([x, y, label], index) => (
-          <g key={String(label)} className="node" style={{ animationDelay: `${index * 0.5}s` }}>
-            <circle cx={Number(x)} cy={Number(y)} r={label === "CONTROL" ? 52 : 30} fill="#0D1740" stroke={label === "CONTROL" ? "#C1262A" : "rgba(255,255,255,.2)"} />
-            <circle cx={Number(x)} cy={Number(y)} r={label === "CONTROL" ? 40 : 22} fill={label === "CONTROL" ? "#C1262A" : "#121E4B"} fillOpacity={label === "CONTROL" ? ".18" : "1"} />
-            <text x={Number(x)} y={Number(y) + 4} textAnchor="middle" fill="white" fillOpacity={label === "CONTROL" ? "1" : ".65"} fontSize={label === "CONTROL" ? "11" : "8"} fontWeight="700" letterSpacing="1.2">
-              {label}
-            </text>
+      <svg viewBox="0 0 640 500" fill="none" aria-hidden="true">
+        <rect x="28" y="20" width="584" height="460" rx="4" stroke="rgba(255,255,255,.2)" strokeWidth="1.25" />
+        <path d="M28 20H48M28 20V40M612 20H592M612 20V40M28 480H48M28 480V460M612 480H592M612 480V460" stroke="#C1262A" strokeWidth="1.5" />
+        <text x="64" y="58" fill="rgba(255,255,255,.55)" fontSize="11" fontWeight="700" letterSpacing="2.4" fontFamily="inherit">
+          PRIVATE ENVIRONMENT
+        </text>
+        {cards.map((card) => (
+          <g key={card.title}>
+            <rect x={card.x} y="84" width="160" height="96" rx="2" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.16)" />
+            <text x={card.x + 18} y="114" fill="#C1262A" fontSize="10" fontWeight="700" letterSpacing="1.4" fontFamily="inherit">{card.k}</text>
+            <text x={card.x + 18} y="138" fill="white" fontSize="15" fontWeight="600" fontFamily="inherit">{card.title}</text>
+            <text className="env-note" x={card.x + 18} y="158" fill="rgba(255,255,255,.5)" fontSize="11" fontFamily="inherit">{card.copy}</text>
           </g>
         ))}
+        <path d="M144 180V214M320 180V214M496 180V214M144 214H496M320 214V236" stroke="rgba(255,255,255,.22)" strokeWidth="1.25" />
+        <path className="env-flow" d="M144 214H496M320 214V236" stroke="#C1262A" strokeWidth="1.5" />
+        <rect x="64" y="236" width="512" height="88" rx="2" fill="rgba(193,38,42,.08)" stroke="#C1262A" strokeWidth="1.25" className="env-gate" />
+        <rect x="64" y="236" width="3" height="88" fill="#C1262A" />
+        <text x="88" y="274" fill="white" fontSize="15" fontWeight="600" fontFamily="inherit">Control</text>
+        <text className="env-note" x="88" y="298" fill="rgba(255,255,255,.62)" fontSize="12" fontFamily="inherit">Identity · Policy · Guardrail · Audit</text>
+        <path d="M320 324V352" stroke="rgba(255,255,255,.22)" strokeWidth="1.25" />
+        <path className="env-flow env-flow-delay" d="M320 324V352" stroke="#C1262A" strokeWidth="1.5" />
+        <rect x="64" y="352" width="512" height="80" rx="2" fill="rgba(255,255,255,.03)" stroke="rgba(255,255,255,.16)" />
+        <text x="88" y="388" fill="white" fontSize="15" fontWeight="600" fontFamily="inherit">Enterprise applications</text>
+        <text className="env-note" x="88" y="412" fill="rgba(255,255,255,.5)" fontSize="12" fontFamily="inherit">Governed actions, inside your boundary</text>
       </svg>
     </div>
   );
@@ -257,20 +257,32 @@ export default function SovereignAIPage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             "@context": "https://schema.org",
-            "@type": "FAQPage",
-            mainEntity: faqs.map((faq) => ({
-              "@type": "Question",
-              name: faq.question,
-              acceptedAnswer: { "@type": "Answer", text: faq.answer },
-            })),
+            "@graph": [
+              {
+                "@type": "Product",
+                name: "AI in a Box",
+                brand: { "@type": "Brand", name: "HyperThink Systems" },
+                category: "Private enterprise AI platform",
+                description:
+                  "A pre-integrated private AI platform that brings compute, AI software, data integration, and enterprise control into one deployable environment.",
+              },
+              {
+                "@type": "FAQPage",
+                mainEntity: faqs.map((faq) => ({
+                  "@type": "Question",
+                  name: faq.question,
+                  acceptedAnswer: { "@type": "Answer", text: faq.answer },
+                })),
+              },
+            ],
           }),
         }}
       />
 
       <header className="topbar">
         <Logo light />
-        <a className="button button-sm" href="mailto:info@hyperthinksys.com?subject=Sovereign%20AI%20assessment">
-          <span className="button-label-desktop">Talk to an architect</span>
+        <a className="button button-sm" href="mailto:info@hyperthinksys.com?subject=AI%20in%20a%20Box">
+          <span className="button-label-desktop">Talk to expert</span>
           <span className="button-label-mobile">Talk to us</span>
           <ArrowRight size={15} aria-hidden="true" />
         </a>
@@ -280,87 +292,28 @@ export default function SovereignAIPage() {
         <div className="hero-grid" aria-hidden="true" />
         <div className="shell hero-layout">
           <Reveal className="hero-copy" immediate>
-            <h1 id="hero-title">
-              Sovereign AI.
-              <span className="hero-title-line">
-                <span className="hero-nowrap">Your infrastructure.</span> Your rules.
-              </span>
-            </h1>
+            <h1 id="hero-title">AI in a Box</h1>
+            <p className="hero-kicker">Enterprise AI. Packaged. Private. Production-ready.</p>
             <p className="hero-lede">
-              HyperThink Systems’ Sovereign AI gives enterprises AI infrastructure, models, and governance entirely inside their control—your data, your private AI infrastructure, your operating boundaries.
+              A pre-integrated private enterprise AI platform that brings compute, AI software, data integration, and enterprise control into one deployable environment.
             </p>
             <div className="hero-actions">
-              <a className="button" href="mailto:info@hyperthinksys.com?subject=Sovereign%20AI%20architecture%20assessment">
+              <a className="button" href="mailto:info@hyperthinksys.com?subject=AI%20in%20a%20Box%20assessment">
                 Request an assessment <ArrowRight size={17} aria-hidden="true" />
               </a>
-              <a className="text-link text-link-light" href="#meaning">
+              <a className="text-link text-link-light" href="#overview">
                 See how it works <ArrowDown size={16} aria-hidden="true" />
               </a>
             </div>
+            <p className="hero-chain">
+              <span>Your data → Your infrastructure</span>
+              <span>Your AI → Your control</span>
+            </p>
           </Reveal>
           <Reveal className="hero-visual" delay={0.08} immediate>
             <div className="hero-visual-frame">
               <ControlPlane />
-              <span className="signal-chip signal-chip-policy"><i aria-hidden="true" />Policy enforced</span>
-              <span className="signal-chip signal-chip-audit"><i aria-hidden="true" />Audit ready</span>
             </div>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="section problem" aria-labelledby="problem-title">
-        <div className="shell">
-          <Reveal>
-            <Eyebrow>The control gap</Eyebrow>
-            <h2 id="problem-title" className="statement">
-              AI adoption is outrunning <span>AI control.</span>
-            </h2>
-            <p className="section-lede">
-              The question is no longer whether to adopt AI. It is whether you can prove where it runs, what data it touches, and who—or what—is allowed to act.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      <section id="meaning" className="section bg-mist" aria-labelledby="meaning-title">
-        <div className="shell">
-          <Reveal>
-            <Eyebrow>A clear definition</Eyebrow>
-            <h2 id="meaning-title">What is sovereign AI?</h2>
-            <p className="definition">
-              Sovereign AI is an enterprise approach to operating AI within your defined boundaries for infrastructure, data, models, access, and policy. It establishes AI data sovereignty by giving your organization direct authority over where AI runs, what it can use, and how every action is governed.
-            </p>
-          </Reveal>
-          <div className="pillars">
-            {[
-              {
-                number: "01",
-                title: "Own the boundary",
-                copy: "Keep models, private AI infrastructure, and sensitive data inside the jurisdiction and environment your organization chooses—so AI data sovereignty is architectural, not aspirational.",
-              },
-              {
-                number: "02",
-                title: "Define permission",
-                copy: "Turn enterprise AI governance into executable rules for identities, information, models, agents, and tools.",
-              },
-              {
-                number: "03",
-                title: "Enforce at runtime",
-                copy: "Apply security and policy at the moment of action—not after a model response has already left the boundary.",
-              },
-            ].map((pillar, index) => (
-              <Reveal className="pillar" delay={index * 0.08} key={pillar.title}>
-                <span className="pillar-number">{pillar.number}</span>
-                <h3>{pillar.title}</h3>
-                <p>{pillar.copy}</p>
-              </Reveal>
-            ))}
-          </div>
-          <Reveal className="regional-note">
-            <span className="regional-marker" aria-hidden="true" />
-            <p>
-              For organizations evaluating sovereign AI in the UAE, sovereign AI in Saudi Arabia, or deployments across India, the architecture can align data residency, local regulatory obligations, and enterprise security without fragmenting the operating model.
-            </p>
           </Reveal>
         </div>
       </section>
@@ -368,16 +321,16 @@ export default function SovereignAIPage() {
       <section id="overview" className="section stack-section" aria-labelledby="stack-title">
         <div className="shell">
           <Reveal className="series-intro">
-            <Eyebrow>One controlled foundation</Eyebrow>
+            <Eyebrow>The AI foundation</Eyebrow>
             <div className="series-intro-grid">
-              <h2 id="stack-title">Sovereign AI infrastructure, end to end.</h2>
+              <h2 id="stack-title">Everything enterprise AI needs, in one platform.</h2>
               <p>
-                A sovereign AI platform that connects the physical environment to production applications through one governed control plane.
+                Compute, AI software, data integration, and control — packaged as one private foundation, from infrastructure to enterprise systems.
               </p>
             </div>
           </Reveal>
           <div className="stack-flow" role="list">
-            {stack.map((layer, index) => {
+            {foundation.map((layer, index) => {
               const Icon = layer.icon;
               return (
                 <Reveal className="stack-layer" delay={index * 0.06} key={layer.title}>
@@ -393,7 +346,7 @@ export default function SovereignAIPage() {
                       <p>{layer.copy}</p>
                     </div>
                   </div>
-                  {index < stack.length - 1 && (
+                  {index < foundation.length - 1 && (
                     <span className="stack-connector" aria-hidden="true">
                       <ChevronRight size={14} />
                     </span>
@@ -402,41 +355,87 @@ export default function SovereignAIPage() {
               );
             })}
           </div>
+          <p className="flow-line">Infrastructure → Models → Gateway → Enterprise systems</p>
         </div>
       </section>
 
-      <section className="section bg-mist deployment" aria-labelledby="deploy-title">
+      <section className="section bg-mist compute" aria-labelledby="compute-title">
         <div className="shell">
-          <Reveal>
-            <Eyebrow>Your environment, your choice</Eyebrow>
-            <h2 id="deploy-title">How sovereign AI infrastructure deploys.</h2>
-            <p className="section-lede">
-              Use the same control model whether workloads must remain inside your data center or run in a dedicated cloud tenancy.
-            </p>
+          <Reveal className="series-intro">
+            <Eyebrow>High-performance compute</Eyebrow>
+            <div className="series-intro-grid">
+              <h2 id="compute-title">The compute foundation for enterprise AI.</h2>
+              <p>
+                Built for demanding workloads: generative AI, agentic AI, computer vision, model inference, and enterprise applications.
+              </p>
+            </div>
           </Reveal>
-          <div className="deploy-grid">
-            <Reveal className="deploy-card">
-              <div className="deploy-icon"><Server aria-hidden="true" /></div>
-              <p className="card-kicker">Maximum physical control</p>
-              <h3>Fully on-premise</h3>
-              <p>Run the complete private AI infrastructure in your facilities, including models, data services, orchestration, guardrails, and observability—preserving AI data sovereignty at the physical layer.</p>
-              <ul>
-                <li><Check aria-hidden="true" /> Air-gapped options</li>
-                <li><Check aria-hidden="true" /> Local model serving</li>
-                <li><Check aria-hidden="true" /> Customer-managed operations</li>
-              </ul>
-            </Reveal>
-            <Reveal className="deploy-card" delay={0.08}>
-              <div className="deploy-icon"><Cloud aria-hidden="true" /></div>
-              <p className="card-kicker">Controlled cloud economics</p>
-              <h3>Cloud, self-hosted</h3>
-              <p>Deploy into a dedicated cloud account or sovereign region while keeping keys, network boundaries, identities, and runtime policies under your control.</p>
-              <ul>
-                <li><Check aria-hidden="true" /> Dedicated tenancy</li>
-                <li><Check aria-hidden="true" /> Regional data residency</li>
-                <li><Check aria-hidden="true" /> Portable architecture</li>
-              </ul>
-            </Reveal>
+          <div className="compute-grid">
+            {computeCaps.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <Reveal className="compute-item" delay={index * 0.05} key={item.title}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <div className="stack-icon" aria-hidden="true"><Icon strokeWidth={1.5} /></div>
+                  <h3>{item.title}</h3>
+                </Reveal>
+              );
+            })}
+          </div>
+          <p className="flow-line">Compute → AI runtime → Models → Enterprise applications</p>
+        </div>
+      </section>
+
+      <section className="section capabilities" aria-labelledby="capabilities-title">
+        <div className="shell">
+          <Reveal className="series-intro">
+            <Eyebrow>From infrastructure to AI</Eyebrow>
+            <div className="series-intro-grid">
+              <h2 id="capabilities-title">One foundation. Multiple enterprise AI workloads.</h2>
+              <p>The same private platform serves many production workloads, without a separate stack for each one.</p>
+            </div>
+          </Reveal>
+          <div className="workload-grid">
+            {workloads.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <Reveal className="workload-card" delay={index * 0.05} key={item.title}>
+                  <div className="stack-icon" aria-hidden="true"><Icon strokeWidth={1.5} /></div>
+                  <div>
+                    <div className="workload-heading">
+                      <span>{item.number}</span>
+                      <h3>{item.title}</h3>
+                    </div>
+                    <p>{item.copy}</p>
+                  </div>
+                </Reveal>
+              );
+            })}
+          </div>
+          <p className="flow-line">One infrastructure · Multiple models · Multiple workloads</p>
+        </div>
+      </section>
+
+      <section className="section bg-mist why" aria-labelledby="why-title">
+        <div className="shell">
+          <Reveal className="series-intro">
+            <Eyebrow>Why HyperThink</Eyebrow>
+            <div className="series-intro-grid">
+              <h2 id="why-title">AI, infrastructure, integration, and governance.</h2>
+              <p>One engagement covers the platform, the infrastructure, and the controls, so the first workload and the ones after it share a foundation.</p>
+            </div>
+          </Reveal>
+          <div className="why-grid">
+            {principles.map((item, index) => {
+              const Icon = item.icon;
+              return (
+                <Reveal className="why-card" delay={index * 0.06} key={item.title}>
+                  <div className="stack-icon" aria-hidden="true"><Icon strokeWidth={1.5} /></div>
+                  <h3>{item.title}</h3>
+                  <p>{item.copy}</p>
+                </Reveal>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -486,43 +485,64 @@ export default function SovereignAIPage() {
         </div>
       </section>
 
-      <section className="section capabilities" aria-labelledby="capabilities-title">
+      <section className="section bg-mist deployment" aria-labelledby="deploy-title">
         <div className="shell">
-          <Reveal>
-            <Eyebrow>From foundation to outcomes</Eyebrow>
-            <h2 id="capabilities-title">What you can build on it.</h2>
-            <p className="section-lede">A governed capability map for the work that matters—without creating another disconnected AI pilot.</p>
+          <Reveal className="series-intro">
+            <Eyebrow>Your environment, your choice</Eyebrow>
+            <div className="series-intro-grid">
+              <h2 id="deploy-title">A private environment you control.</h2>
+              <p>
+                Run AI in a Box inside your data center or self-hosted in a dedicated cloud tenancy, with the same control model either way.
+              </p>
+            </div>
           </Reveal>
-          <div className="capability-map">
-            {capabilities.map((group, index) => (
-              <Reveal className="capability-group" delay={index * 0.08} key={group.title}>
-                <h3>{group.title}</h3>
-                <ul>
-                  {group.items.map((item) => <li key={item}>{item}<ArrowRight size={15} aria-hidden="true" /></li>)}
-                </ul>
-              </Reveal>
-            ))}
+          <div className="deploy-grid">
+            <Reveal className="deploy-card">
+              <div className="deploy-icon"><Server aria-hidden="true" /></div>
+              <p className="card-kicker">Maximum physical control</p>
+              <h3>Fully on-premise</h3>
+              <p>Run the complete private AI platform in your facilities, including models, data services, orchestration, guardrails, and observability.</p>
+              <ul>
+                <li><Check aria-hidden="true" /> Air-gapped options</li>
+                <li><Check aria-hidden="true" /> Local model serving</li>
+                <li><Check aria-hidden="true" /> Customer-managed operations</li>
+              </ul>
+            </Reveal>
+            <Reveal className="deploy-card" delay={0.08}>
+              <div className="deploy-icon"><Cloud aria-hidden="true" /></div>
+              <p className="card-kicker">Controlled cloud economics</p>
+              <h3>Cloud, self-hosted</h3>
+              <p>Deploy into a dedicated cloud account or sovereign region while keeping keys, network boundaries, identities, and runtime policies under your control.</p>
+              <ul>
+                <li><Check aria-hidden="true" /> Dedicated tenancy</li>
+                <li><Check aria-hidden="true" /> Regional data residency</li>
+                <li><Check aria-hidden="true" /> Portable architecture</li>
+              </ul>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      <section className="section bg-mist engagement" aria-labelledby="engagement-title">
+      <section className="section engagement" aria-labelledby="engagement-title">
         <div className="shell">
-          <Reveal>
-            <Eyebrow>A path to production</Eyebrow>
-            <h2 id="engagement-title">How we work together.</h2>
+          <Reveal className="series-intro">
+            <Eyebrow>How we take it live</Eyebrow>
+            <div className="series-intro-grid">
+              <h2 id="engagement-title">From compute to production AI.</h2>
+              <p>AI, infrastructure, integration, and governance — designed together, then expanded as models and workloads grow.</p>
+            </div>
           </Reveal>
           <div className="timeline">
             {stages.map((stage, index) => (
-              <Reveal className="timeline-step" delay={index * 0.08} key={stage}>
+              <Reveal className="timeline-step" delay={index * 0.08} key={stage.title}>
                 <span>{String(index + 1).padStart(2, "0")}</span>
-                <h3>{stage}</h3>
+                <div>
+                  <h3>{stage.title}</h3>
+                  <p>{stage.copy}</p>
+                </div>
               </Reveal>
             ))}
           </div>
-          <Reveal className="timeline-copy">
-            <p>Start with the control outcomes your organization needs. Leave with an operational AI capability designed to improve as models, regulations, and workloads change.</p>
-          </Reveal>
         </div>
       </section>
 
@@ -532,9 +552,9 @@ export default function SovereignAIPage() {
             <Eyebrow>Answers before architecture</Eyebrow>
             <h2 id="faq-title">Questions enterprise teams ask first.</h2>
             <p className="section-lede">
-              Clear answers for technology, security, risk, and business leaders evaluating a controlled path to production AI.
+              What you receive, where your data stays, and how a first workload becomes a production platform.
             </p>
-            <a className="text-link faq-contact-link" href="mailto:info@hyperthinksys.com?subject=Sovereign%20AI%20question">
+            <a className="text-link faq-contact-link" href="mailto:info@hyperthinksys.com?subject=AI%20in%20a%20Box%20question">
               Ask a different question <ArrowRight size={16} aria-hidden="true" />
             </a>
           </Reveal>
@@ -558,14 +578,14 @@ export default function SovereignAIPage() {
         <div className="final-motif" aria-hidden="true"><ControlPlane compact /></div>
         <div className="shell">
           <Reveal>
-            <Eyebrow dark>The next move is yours</Eyebrow>
-            <h2 id="cta-title">Build AI with confidence.</h2>
-            <p>Move from isolated experiments to an AI operating model your teams, regulators, and customers can trust.</p>
+            <Eyebrow dark>Let’s build what’s next</Eyebrow>
+            <h2 id="cta-title">Package private AI for production.</h2>
+            <p>Move from isolated experiments to one foundation your teams can deploy, govern, and scale.</p>
             <div className="hero-actions">
-              <a className="button" href="mailto:info@hyperthinksys.com?subject=Discuss%20Sovereign%20AI">
+              <a className="button" href="mailto:info@hyperthinksys.com?subject=Discuss%20AI%20in%20a%20Box">
                 Talk to us <ArrowRight size={17} aria-hidden="true" />
               </a>
-              <a className="button button-outline" href="/sovereign-ai-overview.pdf" download>
+              <a className="button button-outline" href="/ai-in-a-box-overview.pdf" download>
                 Download overview <Download size={17} aria-hidden="true" />
               </a>
             </div>

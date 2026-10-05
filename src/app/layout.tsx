@@ -10,15 +10,15 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://hyperthinksys.com"),
-  title: "Sovereign AI Infrastructure & Platform | HyperThink Systems",
+  title: "AI in a Box | Private Enterprise AI Platform | HyperThink Systems",
   description:
-    "Enterprise sovereign AI infrastructure, governance, and platform for regulated industries across India and the GCC. Your AI. Your data. Your infrastructure.",
-  alternates: { canonical: "/sovereign-ai" },
+    "A pre-integrated private AI platform that brings compute, models, data integration, and enterprise control into one deployable environment. On-premise or self-hosted.",
+  alternates: { canonical: "/ai-in-a-box" },
   openGraph: {
-    title: "Sovereign AI Infrastructure & Platform | HyperThink Systems",
+    title: "AI in a Box | Private Enterprise AI Platform | HyperThink Systems",
     description:
-      "Enterprise sovereign AI infrastructure, governance, and platform for regulated industries across India and the GCC.",
-    url: "/sovereign-ai",
+      "A pre-integrated private AI platform that brings compute, models, data integration, and enterprise control into one deployable environment.",
+    url: "/ai-in-a-box",
     siteName: "HyperThink Systems",
     type: "website",
   },
